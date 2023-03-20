@@ -1,14 +1,17 @@
 [
   {
     "id": 1,
-    "content": "JavaScript is a great programming language if you love finding bugs in the dark"
+    "content": "JavaScript is a great programming language if you love finding bugs in the dark",
+    "date_created": "2023/2/22"
   },
   {
     "id": 2,
-    "content": "The MVC architecture really simplifies structuring a project with separation of concerns"
+    "content": "The MVC architecture really simplifies structuring a project with separation of concerns",
+    "date_created": "2023/3/12"
   },
   {
     "id": 3,
-    "content": "Learning the back end has been really interesting"
+    "content": "Learning the back end has been really interesting",
+    "date_created": "2023/1/30"
   }
 ]
