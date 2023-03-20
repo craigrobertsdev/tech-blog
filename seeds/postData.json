@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "content": "JavaScript is a great programming language if you love finding bugs in the dark"
+  },
+  {
+    "id": 2,
+    "content": "The MVC architecture really simplifies structuring a project with separation of concerns"
+  },
+  {
+    "id": 3,
+    "content": "Learning the back end has been really interesting"
+  }
+]
