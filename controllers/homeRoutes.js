@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ["username"],
+          attributes: ["name"],
         },
       ],
     });
@@ -19,11 +19,11 @@ router.get("/", async (req, res) => {
     }
 
     // Serialize data so the template can read it
-    const projects = projectData.map((project) => project.get({ plain: true }));
+    const posts = postData.map((project) => project.get({ plain: true }));
 
     // Pass serialized data and session flag into template
     res.render("homepage", {
-      projects,
+      posts,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
@@ -31,9 +31,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/project/:id", async (req, res) => {
+router.get("/dashboard", withAuth, async (req, res) => {
   try {
-    const projectData = await Project.findByPk(req.params.id, {
+    const postData = await Post.findAll({
       include: [
         {
           model: User,
@@ -42,10 +42,10 @@ router.get("/project/:id", async (req, res) => {
       ],
     });
 
-    const project = projectData.get({ plain: true });
+    const posts = projectData.map((post) => get({ plain: true }));
 
-    res.render("project", {
-      ...project,
+    res.render("dashboard", {
+      posts,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
@@ -81,6 +81,16 @@ router.get("/login", (req, res) => {
   }
 
   res.render("login");
+});
+
+router.get("/signup", (req, res) => {
+  // If the user is already logged in, redirect the request to another route
+  if (req.session.logged_in) {
+    res.redirect("/profile");
+    return;
+  }
+
+  res.render("signup");
 });
 
 module.exports = router;
