@@ -27,15 +27,15 @@
             <button
               class="no-button fs-5 text-decoration-none text-success"
               id="logout"
-            >logout</button>
+            >Logout</button>
           {{else}}
             <a
               href="/login"
               class="fs-5 text-decoration-none text-success"
-            >login</a>
+            >Login</a>
           {{/if}}
         </nav>
-        <h1 class="d-inline-block p-2">The Tech Blog</h1>
+        <h1 class="d-inline-block p-2">{{page_title}}</h1>
       </header>
       <main class="container container-fluid mt-5">
         <!-- Render the sub layout -->
@@ -50,6 +50,12 @@
     {{#if logged_in}}
       <script src="/js/logout.js"></script>
     {{/if}}
+    
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.slim.min.js"
+      integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw="
+      crossorigin="anonymous"
+    ></script>
   </body>
 
 </html>

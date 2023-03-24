@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Post, User } = require("../models");
+const { Post, User, Comment } = require("../models");
 const withAuth = require("../utils/auth");
 
 router.get("/", async (req, res) => {
@@ -25,6 +25,7 @@ router.get("/", async (req, res) => {
     res.render("homepage", {
       posts,
       logged_in: req.session.logged_in,
+      page_title: "The Tech Blog",
     });
   } catch (err) {
     res.status(500).json(err);
@@ -34,6 +35,9 @@ router.get("/", async (req, res) => {
 router.get("/dashboard", withAuth, async (req, res) => {
   try {
     const postData = await Post.findAll({
+      where: {
+        user_id: req.session.user_id,
+      },
       include: [
         {
           model: User,
@@ -42,31 +46,12 @@ router.get("/dashboard", withAuth, async (req, res) => {
       ],
     });
 
-    const posts = projectData.map((post) => get({ plain: true }));
+    const posts = postData.map((post) => post.get({ plain: true }));
 
     res.render("dashboard", {
       posts,
       logged_in: req.session.logged_in,
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// Use withAuth middleware to prevent access to route
-router.get("/profile", withAuth, async (req, res) => {
-  try {
-    // Find the logged in user based on the session ID
-    const userData = await User.findByPk(req.session.user_id, {
-      attributes: { exclude: ["password"] },
-      include: [{ model: Project }],
-    });
-
-    const user = userData.get({ plain: true });
-
-    res.render("profile", {
-      ...user,
-      logged_in: true,
+      page_title: "Dashboard",
     });
   } catch (err) {
     res.status(500).json(err);
@@ -91,6 +76,27 @@ router.get("/signup", (req, res) => {
   }
 
   res.render("signup");
+});
+
+router.get("/post", withAuth, (req, res) => {
+  res.render("create-post");
+});
+
+router.get("/post/:id", async (req, res) => {
+  try {
+    const postData = await Post.findByPk(req.params.id, { include: Comment });
+
+    if (!postData) {
+      res.status(404).json("Cannot find the requested post");
+    }
+
+    const post = postData.get({ plain: true });
+    console.log("🚀 ~ file: homeRoutes.js:95 ~ router.get ~ post:", post);
+
+    res.render("post", { post });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;

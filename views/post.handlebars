@@ -1,0 +1,30 @@
+<div class="card bg-dark mb-3">
+  <div class="card-body">
+    <div
+      class="bg-dark text-info d-flex justify-content-between align-items-center post"
+    >
+      <h4>{{post.title}}</h4>
+      <span>Posted by
+        {{post.user.name}}
+        on
+        {{format_date post.date_created}}</span>
+    </div>
+
+    <div class="card-text fs-5 text-white">{{post.content}}</div>
+  </div>
+</div>
+
+{{#each comments as |comment|}}{{/each}}
+
+<div class="add-comment">
+  <form id="create-comment" class="form-control bg-dark text-info">
+    <label for="comment-title" class="form-label">Title</label>
+    <input class="form-control mb-2 bg-dark text-info" id="comment-title" />
+    <label for="comment-content" class="form-label">Comment</label>
+    <textarea
+      class="form-control mb-3 bg-dark text-info"
+      id="comment-content"
+    ></textarea>
+    <button type="submit" class="btn btn-info">Post comment</button>
+  </form>
+</div>
