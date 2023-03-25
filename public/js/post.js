@@ -18,7 +18,6 @@ const createPost = async (event) => {
 };
 
 const deletePost = async () => {
-  console.log("clicked");
   const postId = location.href.split("/").reverse()[0];
   const response = await fetch(`/api/dashboard/post/${postId}`, {
     method: "DELETE",
@@ -30,13 +29,32 @@ const deletePost = async () => {
   }
 };
 
+const updatePost = async () => {
+  const postId = location.href.split("/").reverse()[0];
+
+  const title = document.querySelector(".post-title").value;
+  const content = document.querySelector(".post-content").value;
+
+  const response = await fetch(`/api/dashboard/post/${postId}`, {
+    method: "PUT",
+    body: JSON.stringify({ title, content }),
+
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (response.ok) {
+    document.location.replace("/dashboard");
+  }
+};
+
 const addComment = async () => {
   const title = document.getElementById("comment-title").value;
   const content = document.getElementById("comment-content").value;
+  const postId = location.href.split("/").reverse()[0];
 
   await fetch("/api/dashboard/comment", {
     method: "POST",
-    body: JSON.stringify({ title, content }),
+    body: JSON.stringify({ title, content, postId }),
 
     headers: { "Content-Type": "application/json" },
   });
@@ -58,10 +76,10 @@ if (document.querySelector(".toggle-comment")) {
     .addEventListener("click", toggleAddComment);
 }
 
-if (document.querySelector(".update-post")) {
+if (document.querySelector(".update-button")) {
   document
-    .querySelector(".update-post")
-    .addEventListener("click", toggleUpdate);
+    .querySelector(".update-button")
+    .addEventListener("click", updatePost);
 }
 
 if (document.querySelector(".delete-button")) {

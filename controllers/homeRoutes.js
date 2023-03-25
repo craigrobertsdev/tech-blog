@@ -61,7 +61,7 @@ router.get("/dashboard", withAuth, async (req, res) => {
 router.get("/login", (req, res) => {
   // If the user is already logged in, redirect the request to another route
   if (req.session.logged_in) {
-    res.redirect("/profile");
+    res.redirect("/dashboard");
     return;
   }
 
@@ -71,7 +71,7 @@ router.get("/login", (req, res) => {
 router.get("/signup", (req, res) => {
   // If the user is already logged in, redirect the request to another route
   if (req.session.logged_in) {
-    res.redirect("/profile");
+    res.redirect("/dashboard");
     return;
   }
 
@@ -86,7 +86,7 @@ router.get("/post/:id", withAuth, async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {
       include: [
-        { model: Comment },
+        { model: Comment, attributes: ["user_id"] },
         {
           model: User,
           attributes: ["name"],
@@ -99,6 +99,7 @@ router.get("/post/:id", withAuth, async (req, res) => {
     }
 
     const post = postData.get({ plain: true });
+    console.log("🚀 ~ file: homeRoutes.js:102 ~ router.get ~ post:", post);
 
     // allows partial to determine whether the post partial should show the options to update/delete the post or whether it should allow comments to be added by another user
     const isPostOwner = post.user_id === req.session.user_id ? true : false;
