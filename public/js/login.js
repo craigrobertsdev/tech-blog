@@ -16,7 +16,7 @@ const loginFormHandler = async (event) => {
     });
 
     if (response.ok) {
-      // If successful, redirect the browser to the profile page
+      // If successful, redirect the browser to the dashboard page
       document.location.replace("/dashboard");
     } else {
       alert(response.statusText);
@@ -37,14 +37,16 @@ const signupFormHandler = async (event) => {
       headers: { "Content-Type": "application/json" },
     });
 
+    // on sign up, send user to their dashboard
     if (response.ok) {
-      document.location.replace("/");
+      document.location.replace("/dashboard");
     } else {
       alert(response.statusText);
     }
   }
 };
 
+// toggles the login and sign up forms on screen instead of new page for each
 const toggleSignup = () => {
   if (loggingIn) {
     document.getElementById("login-form").style.display = "none";

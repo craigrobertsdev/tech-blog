@@ -27,12 +27,14 @@
       >{{post.content}}</div>
     {{/if}}
   </div>
+  {{! Shows update and delete buttons only if the author is looking at the post }}
   {{#if isPostOwner}}
     <button class="btn btn-info update-button mb-2 mx-2">Update</button>
     <button class="btn btn-danger delete-button mb-2 mx-2">Delete</button>
   {{/if}}
 </div>
 
+{{! show comment entry form if the viewer is not teh author }}
 {{#unless isPostOwner}}
   <div class="add-comment">
     <form id="create-comment" class="form-control bg-dark text-info">
@@ -47,6 +49,7 @@
   </div>
 {{/unless}}
 
+{{! display each comment returned from the API with attribution to the author }}
 {{#each post.comments as |comment|}}
   <div class="card mb-3 p-2 bg-dark">
     <div class="card-text text-white mb-2">

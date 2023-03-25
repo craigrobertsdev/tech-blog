@@ -2,9 +2,10 @@ const router = require("express").Router();
 const { Post, User, Comment } = require("../models");
 const withAuth = require("../utils/auth");
 
+// called when a user accesses the site. displays all posts in the blog
 router.get("/", async (req, res) => {
   try {
-    // Get all projects and JOIN with user data
+    // Get all posts and JOIN with user data
     const postData = await Post.findAll({
       include: [
         {
@@ -32,6 +33,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// on accessing dashboard, when signed in, gets all posts authored by that user
 router.get("/dashboard", withAuth, async (req, res) => {
   try {
     const postData = await Post.findAll({
@@ -46,6 +48,7 @@ router.get("/dashboard", withAuth, async (req, res) => {
       ],
     });
 
+    // Serialize data so the template can read it
     const posts = postData.map((post) => post.get({ plain: true }));
 
     res.render("dashboard", {
@@ -70,18 +73,11 @@ router.get("/login", (req, res) => {
   });
 });
 
-router.get("/signup", (req, res) => {
-  // If the user is already logged in, redirect the request to another route
-  if (req.session.logged_in) {
-    res.redirect("/dashboard");
-    return;
-  }
-
-  res.render("signup");
-});
-
+// loads the create-post form
 router.get("/post", withAuth, (req, res) => {
-  res.render("create-post");
+  res.render("create-post", {
+    logged_in: req.session.logged_in,
+  });
 });
 
 router.get("/post/:id", withAuth, async (req, res) => {
@@ -89,7 +85,7 @@ router.get("/post/:id", withAuth, async (req, res) => {
     // get post with matching id,  the user who wrote it and all comments
     const postData = await Post.findByPk(req.params.id, {
       include: [
-        { model: Comment },
+        { model: Comment, order: [["date_created", "DESC"]] },
         {
           model: User,
           attributes: ["name"],
@@ -99,7 +95,6 @@ router.get("/post/:id", withAuth, async (req, res) => {
 
     // create array of user ids
     const userIds = postData.comments.map((post) => post.user_id);
-    console.log("🚀 ~ file: homeRoutes.js:98 ~ router.get ~ userIds:", userIds);
 
     // get all users whose ids are in the userIds array
     const userData = await User.findAll({
@@ -130,7 +125,12 @@ router.get("/post/:id", withAuth, async (req, res) => {
 
     res
       .status(200)
-      .render("post", { post, isPostOwner, page_title: "View Post" });
+      .render("post", {
+        post,
+        isPostOwner,
+        page_title: "View Post",
+        logged_in: req.session.logged_in,
+      });
   } catch (err) {
     res.status(500).json(err);
   }

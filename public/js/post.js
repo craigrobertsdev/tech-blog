@@ -12,12 +12,14 @@ const createPost = async (event) => {
     headers: { "Content-Type": "application/json" },
   });
 
+  // go back to dashboard when post is created
   if (response.ok) {
     document.location.replace("/dashboard");
   }
 };
 
 const deletePost = async () => {
+  // get post id from the URL
   const postId = location.href.split("/").reverse()[0];
   const response = await fetch(`/api/dashboard/post/${postId}`, {
     method: "DELETE",
@@ -32,6 +34,7 @@ const deletePost = async () => {
 const updatePost = async () => {
   const postId = location.href.split("/").reverse()[0];
 
+  // get current values of the update post form
   const title = document.querySelector(".post-title").value;
   const content = document.querySelector(".post-content").value;
 
@@ -49,6 +52,7 @@ const updatePost = async () => {
 
 const addComment = async (event) => {
   event.preventDefault();
+  // get the text from the comment input
   const content = document.getElementById("comment-content").value;
   const postId = location.href.split("/").reverse()[0];
 
@@ -58,12 +62,13 @@ const addComment = async (event) => {
     headers: { "Content-Type": "application/json" },
   });
 
-  console.log(response);
+  // refresh page after comment submitted to display all comments on the post
   if (response.ok) {
     document.location.reload();
   }
 };
 
+// as this js file is used in a number of views, each event listener is guarded by an if statement to prevent error if the element doesn't exist in that page
 if (document.querySelector("#create-post")) {
   document.querySelector("#create-post").addEventListener("submit", createPost);
 }

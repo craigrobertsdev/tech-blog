@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { Post, Comment } = require("../../models");
 const withAuth = require("../../utils/auth");
 
+// called when user creates a post.
 router.post("/post", withAuth, async (req, res) => {
   try {
     const newPost = await Post.create({
@@ -16,10 +17,13 @@ router.post("/post", withAuth, async (req, res) => {
   }
 });
 
+// called when user updates a post they authored
 router.put("/post/:id", withAuth, async (req, res) => {
   try {
+    // find the post in the database
     const postData = await Post.findByPk(req.params.id);
 
+    // check if the user attempting to update it is the user who created it
     if (req.session.user_id !== postData.user_id) {
       res
         .status(401)
@@ -30,6 +34,7 @@ router.put("/post/:id", withAuth, async (req, res) => {
       res.status(404).json({ message: "Post not found." });
     }
 
+    // update the post with the new values
     const post = await postData.update({
       title: req.body.title,
       content: req.body.content,
@@ -41,6 +46,7 @@ router.put("/post/:id", withAuth, async (req, res) => {
   }
 });
 
+// delete post by id
 router.delete("/post/:id", withAuth, async (req, res) => {
   try {
     const postData = await Post.destroy({
@@ -61,10 +67,8 @@ router.delete("/post/:id", withAuth, async (req, res) => {
   }
 });
 
+// POST a comment to the selected comment
 router.post("/comment", withAuth, async (req, res) => {
-  console.log(req.body);
-  console.log(req.session);
-  console.log(Date());
   try {
     const newComment = await Comment.create({
       content: req.body.content,

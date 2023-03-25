@@ -22,15 +22,20 @@
             href="/dashboard"
             class="fs-5 text-decoration-none text-success"
           >Dashboard</a>
-          <a
-            href="/login"
-            class="fs-5 text-decoration-none text-success"
-          >Login</a>
 
-          <button
-            class="no-button fs-5 text-decoration-none text-success"
-            id="logout"
-          >Logout</button>
+          {{! render the login and logout buttons only when the opposite is true }}
+          {{#unless logged_in}}
+            <a
+              href="/login"
+              class="fs-5 text-decoration-none text-success"
+            >Login</a>
+          {{/unless}}
+          {{#if logged_in}}
+            <button
+              class="no-button fs-5 text-decoration-none text-success"
+              id="logout"
+            >Logout</button>
+          {{/if}}
 
         </nav>
         <h1 class="d-inline-block p-2">{{page_title}}</h1>

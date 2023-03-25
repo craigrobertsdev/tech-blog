@@ -1,3 +1,0 @@
-const addNewPost = () => {
-  fetch("/post");
-};

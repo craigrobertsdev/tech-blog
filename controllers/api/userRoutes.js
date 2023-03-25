@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const { User } = require("../../models");
 
+// called when a user attempts to sign up to the app. checks if the username already exists.
+// if the sign-up is successful, they are logged in with a cookie
 router.post("/", async (req, res) => {
   try {
     // first check if that user exists in database
@@ -29,6 +31,8 @@ router.post("/", async (req, res) => {
   }
 });
 
+// tries to locate username in database and check the stored password against the hashed password. throws an error if not found.
+// if the login is successful, they are given a cookie with their session details
 router.post("/login", async (req, res) => {
   try {
     const userData = await User.findOne({ where: { name: req.body.name } });
@@ -60,6 +64,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// destroys the cookie on the server and returns to the homepage
 router.post("/logout", (req, res) => {
   if (req.session.logged_in) {
     req.session.destroy(() => {
