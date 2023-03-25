@@ -1,23 +1,58 @@
-<div class="row text-white">
+<div class="row text-info" id="login-form">
   <div class="col-6">
     <h2>Login</h2>
     <form class="form login-form">
       <div class="mb-3">
-        <label for="email-login" class="form-label">Email:</label>
-        <input class="form-control" type="text" id="email-login" />
+        <label for="name-login" class="form-label">Name:</label>
+        <input
+          class="form-control bg-dark text-white"
+          type="text"
+          id="name-login"
+        />
       </div>
       <div class="mb-3">
         <label for="password-login" class="form-label">Password:</label>
-        <input class="form-control" type="password" id="password-login" />
+        <input
+          class="form-control bg-dark text-white"
+          type="password"
+          id="password-login"
+        />
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary" type="submit">Login</button>
+        <button class="btn btn-info" type="submit">Login</button>
       </div>
     </form>
   </div>
-  <a id="signup" href="/signup" class="text-white text-decoration-none">Signup
-    instead
-  </a>
 </div>
+
+<div class="row text-info" id="signup-form" style="display:none">
+  <div class="col-6">
+    <h2>Signup</h2>
+    <form class="form signup-form">
+      <div class="mb-3">
+        <label for="name-signup" class="form-label">Name:</label>
+        <input
+          class="form-control bg-dark text-white"
+          type="text"
+          id="name-signup"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="password-signup" class="form-label">Password:</label>
+        <input
+          class="form-control bg-dark text-white"
+          type="password"
+          id="password-signup"
+        />
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-info" type="submit">Signup</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<p id="signup-toggle" class="text-white">Signup instead
+</p>
 
 <script src="./js/login.js"></script>

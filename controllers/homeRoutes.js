@@ -65,7 +65,9 @@ router.get("/login", (req, res) => {
     return;
   }
 
-  res.render("login");
+  res.render("login", {
+    page_title: "Login",
+  });
 });
 
 router.get("/signup", (req, res) => {

@@ -60,7 +60,7 @@ const addComment = async (event) => {
 
   console.log(response);
   if (response.ok) {
-    document.location.assign("/");
+    document.location.reload();
   }
 };
 
