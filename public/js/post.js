@@ -47,26 +47,30 @@ const updatePost = async () => {
   }
 };
 
-const addComment = async () => {
-  const title = document.getElementById("comment-title").value;
+const addComment = async (event) => {
+  event.preventDefault();
   const content = document.getElementById("comment-content").value;
   const postId = location.href.split("/").reverse()[0];
 
-  await fetch("/api/dashboard/comment", {
+  const response = await fetch("/api/dashboard/comment", {
     method: "POST",
-    body: JSON.stringify({ title, content, postId }),
-
+    body: JSON.stringify({ content, postId }),
     headers: { "Content-Type": "application/json" },
   });
+
+  console.log(response);
+  if (response.ok) {
+    document.location.assign("/");
+  }
 };
 
 if (document.querySelector("#create-post")) {
   document.querySelector("#create-post").addEventListener("submit", createPost);
 }
 
-if (document.querySelector(".create-comment")) {
+if (document.querySelector("#create-comment")) {
   document
-    .querySelector(".create-comment")
+    .querySelector("#create-comment")
     .addEventListener("submit", addComment);
 }
 

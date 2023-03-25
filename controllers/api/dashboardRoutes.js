@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Post } = require("../../models");
+const { Post, Comment } = require("../../models");
 const withAuth = require("../../utils/auth");
 
 router.post("/post", withAuth, async (req, res) => {
@@ -19,10 +19,6 @@ router.post("/post", withAuth, async (req, res) => {
 router.put("/post/:id", withAuth, async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id);
-    console.log(
-      "🚀 ~ file: dashboardRoutes.js:70 ~ router.post ~ req:",
-      req.body
-    );
 
     if (req.session.user_id !== postData.user_id) {
       res
@@ -34,15 +30,10 @@ router.put("/post/:id", withAuth, async (req, res) => {
       res.status(404).json({ message: "Post not found." });
     }
 
-    // TODO - complete the PUT route
-    const post = await postData.update(
-      { title: req.body.title, content: req.body.content }
-      // {
-      //   where: {
-      //     id: req.params.id,
-      //   },
-      // }
-    );
+    const post = await postData.update({
+      title: req.body.title,
+      content: req.body.content,
+    });
 
     res.status(200).json(post);
   } catch (err) {
@@ -71,13 +62,15 @@ router.delete("/post/:id", withAuth, async (req, res) => {
 });
 
 router.post("/comment", withAuth, async (req, res) => {
+  console.log(req.body);
+  console.log(req.session);
+  console.log(Date());
   try {
-    const newComment = await Post.create({
-      title: req.body.title,
+    const newComment = await Comment.create({
       content: req.body.content,
-      post_id: req.body.postId,
+      post_id: parseInt(req.body.postId),
       user_id: req.session.user_id,
-      date_created: new Date(),
+      date_created: Date(),
     });
 
     res.status(200).json(newComment);

@@ -84,9 +84,10 @@ router.get("/post", withAuth, (req, res) => {
 
 router.get("/post/:id", withAuth, async (req, res) => {
   try {
+    // get post with matching id,  the user who wrote it and all comments
     const postData = await Post.findByPk(req.params.id, {
       include: [
-        { model: Comment, attributes: ["user_id"] },
+        { model: Comment },
         {
           model: User,
           attributes: ["name"],
@@ -94,12 +95,33 @@ router.get("/post/:id", withAuth, async (req, res) => {
       ],
     });
 
+    // create array of user ids
+    const userIds = postData.comments.map((post) => post.user_id);
+    console.log("🚀 ~ file: homeRoutes.js:98 ~ router.get ~ userIds:", userIds);
+
+    // get all users whose ids are in the userIds array
+    const userData = await User.findAll({
+      where: {
+        id: [...userIds],
+      },
+      attributes: ["id", "name"],
+    });
+
+    const users = userData.map((user) => user.get({ plain: true }));
+
     if (!postData) {
       res.status(404).json("Cannot find the requested post");
     }
 
     const post = postData.get({ plain: true });
-    console.log("🚀 ~ file: homeRoutes.js:102 ~ router.get ~ post:", post);
+
+    for (const user of users) {
+      post.comments.forEach((comment) => {
+        if (comment.user_id === user.id) {
+          comment.user_name = user.name;
+        }
+      });
+    }
 
     // allows partial to determine whether the post partial should show the options to update/delete the post or whether it should allow comments to be added by another user
     const isPostOwner = post.user_id === req.session.user_id ? true : false;
