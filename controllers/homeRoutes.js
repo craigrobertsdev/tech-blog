@@ -80,7 +80,10 @@ router.get("/post", withAuth, (req, res) => {
   });
 });
 
-router.get("/post/:id", withAuth, async (req, res) => {
+// gets the requested post and all comments associated with it including the usernames of the people who posted
+// does not use withAuth middleware as it is desirable to be able to view comments without being logged in and
+// checks are done in the view to prevent unauthorised users from modifying things.
+router.get("/post/:id", async (req, res) => {
   try {
     // get post with matching id,  the user who wrote it and all comments
     const postData = await Post.findByPk(req.params.id, {
@@ -123,14 +126,12 @@ router.get("/post/:id", withAuth, async (req, res) => {
     // allows partial to determine whether the post partial should show the options to update/delete the post or whether it should allow comments to be added by another user
     const isPostOwner = post.user_id === req.session.user_id ? true : false;
 
-    res
-      .status(200)
-      .render("post", {
-        post,
-        isPostOwner,
-        page_title: "View Post",
-        logged_in: req.session.logged_in,
-      });
+    res.status(200).render("post", {
+      post,
+      isPostOwner,
+      page_title: "View Post",
+      logged_in: req.session.logged_in,
+    });
   } catch (err) {
     res.status(500).json(err);
   }

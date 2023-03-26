@@ -1,7 +1,7 @@
 {
-  "name": "crowd-funding",
+  "name": "tech-blog",
   "version": "1.0.0",
-  "description": "",
+  "description": "A blog site for people to post their thoughts on all things tech.",
   "engines": {
     "node": "18.x || 16.x"
   },

@@ -34,19 +34,21 @@
   {{/if}}
 </div>
 
-{{! show comment entry form if the viewer is not teh author }}
+{{! show comment entry form only if the viewer is logged in and is not the author }}
 {{#unless isPostOwner}}
-  <div class="add-comment">
-    <form id="create-comment" class="form-control bg-dark text-info">
-      <label for="comment-content" class="form-label">Comment</label>
-      <textarea
-        class="form-control mb-3 bg-dark text-info"
-        id="comment-content"
-      ></textarea>
+  {{#if logged_in}}
+    <div class="add-comment">
+      <form id="create-comment" class="form-control bg-dark text-info">
+        <label for="comment-content" class="form-label">Comment</label>
+        <textarea
+          class="form-control mb-3 bg-dark text-info"
+          id="comment-content"
+        ></textarea>
 
-      <button type="submit" class="btn btn-info">Submit</button>
-    </form>
-  </div>
+        <button type="submit" class="btn btn-info">Submit</button>
+      </form>
+    </div>
+  {{/if}}
 {{/unless}}
 
 {{! display each comment returned from the API with attribution to the author }}
