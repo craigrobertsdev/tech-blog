@@ -115,6 +115,7 @@ router.get("/post/:id", async (req, res) => {
 
     const post = postData.get({ plain: true });
 
+
     for (const user of users) {
       post.comments.forEach((comment) => {
         if (comment.user_id === user.id) {

@@ -20,7 +20,6 @@ router.post("/post", withAuth, async (req, res) => {
 // called when user updates a post they authored
 router.put("/post/:id", withAuth, async (req, res) => {
   try {
-    // find the post in the database
     const postData = await Post.findByPk(req.params.id);
 
     // check if the user attempting to update it is the user who created it
@@ -28,19 +27,23 @@ router.put("/post/:id", withAuth, async (req, res) => {
       res
         .status(401)
         .json({ message: "You are not authorised to update this post" });
-    }
-
-    if (!postData) {
-      res.status(404).json({ message: "Post not found." });
+      return;
     }
 
     // update the post with the new values
-    const post = await postData.update({
-      title: req.body.title,
-      content: req.body.content,
-    });
+    const post = await Post.update(
+      {
+        title: req.body.title,
+        content: req.body.content,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
 
-    res.status(200).json(post);
+    res.status(200).json(postData);
   } catch (err) {
     res.status(500).json(err);
   }

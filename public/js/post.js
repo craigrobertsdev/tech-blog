@@ -31,7 +31,8 @@ const deletePost = async () => {
   }
 };
 
-const updatePost = async () => {
+const updatePost = async (event) => {
+  event.preventDefault();
   const postId = location.href.split("/").reverse()[0];
 
   // get current values of the update post form
@@ -51,7 +52,6 @@ const updatePost = async () => {
 };
 
 const addComment = async (event) => {
-  event.preventDefault();
   // get the text from the comment input
   const content = document.getElementById("comment-content").value;
   const postId = location.href.split("/").reverse()[0];
